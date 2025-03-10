@@ -1,0 +1,24 @@
+name: DPy Code Quality
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: DPy Action
+        uses: DesigniteTools/DPyAction@v1.1.2
+        with:
+          PAT: ${{ secrets.PAT }}
+      - name: Designite Incremental Code Quality Analysis
+        uses: DesigniteTools/designite-incremental-analysis@v2.0.9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          designite-output-old: designite-output-${{ github.event.before }}
+          designite-output-new: designite-output-${{ github.sha }}
+          repo-name: ${{ github.repository }}
+          tool-name: 'dpy'
